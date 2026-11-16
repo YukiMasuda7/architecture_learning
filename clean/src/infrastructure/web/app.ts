@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import { UuidGenerator } from '../../adapter/utils/uuidGenerator';
 import { PrismaBookRepository } from '../../adapter/repositories/prismaBookRepository';
 import { AddBookUseCase } from '../../application/usecases/book/addBookUseCase';
+import { FindBookByIdUsecase } from '../../application/usecases/book/findBookByIdUsecase';
 import { BookController } from '../../adapter/controllers/bookController';
 import { bookRoutes } from './routers/bookRoutes';
 
@@ -15,8 +16,8 @@ const uuidGenerator = new UuidGenerator();
 
 const bookRepository = new PrismaBookRepository(prisma);
 const addBookUseCase = new AddBookUseCase(bookRepository, uuidGenerator);
-
-const bookController = new BookController(addBookUseCase);
+const findBookByIdUseCase = new FindBookByIdUsecase(bookRepository);
+const bookController = new BookController(addBookUseCase, findBookByIdUseCase);
 
 app.use('/books', bookRoutes(bookController));
 
